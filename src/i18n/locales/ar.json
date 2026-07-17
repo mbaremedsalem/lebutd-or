@@ -1,0 +1,73 @@
+{
+  "header": {
+    "brand": "الهدف ",
+    "brandAccent": "الذهبي",
+    "navHalls": "الملاعب",
+    "navOffers": "العروض"
+  },
+  "home": {
+    "eyebrow": "انطلاقة",
+    "title": "ابحث عن ملعبك واحجزه",
+    "sectionTitle": "الملاعب المتوفرة",
+    "searchPlaceholder": "ابحث بالمدينة أو الحي أو اسم الملعب…",
+    "loadingHalls": "جارٍ تحميل الملاعب…",
+    "emptyTitle": "لا يوجد ملعب يطابق بحثك",
+    "emptySubtitle": "جرّب مدينة أو حيًا آخر."
+  },
+  "quality": {
+    "allLabel": "كل حالات الملعب",
+    "excellent": "حالة ممتازة",
+    "bon": "حالة جيدة",
+    "moyen": "حالة متوسطة",
+    "a_renover": "بحاجة إلى تجديد"
+  },
+  "amenities": {
+    "changing_rooms": "غرف تبديل الملابس",
+    "showers": "دشّات",
+    "parking": "موقف سيارات",
+    "lighting": "إنارة",
+    "snack_bar": "مقهى صغير",
+    "wifi": "واي فاي"
+  },
+  "days": {
+    "lundi": "الاثنين",
+    "mardi": "الثلاثاء",
+    "mercredi": "الأربعاء",
+    "jeudi": "الخميس",
+    "vendredi": "الجمعة",
+    "samedi": "السبت",
+    "dimanche": "الأحد"
+  },
+  "hallCard": {
+    "perHour": "ساعة",
+    "players": "حتى"
+  },
+  "banner": {
+    "tirage": "سحب على الجوائز",
+    "cadeau": "هدية",
+    "offre": "عرض",
+    "autre": "إعلان",
+    "validFrom": "سارٍ من",
+    "validTo": "إلى",
+    "prev": "العرض السابق",
+    "next": "العرض التالي",
+    "goTo": "الانتقال إلى العرض {{n}}"
+  },
+  "detail": {
+    "back": "العودة إلى الملاعب",
+    "notFoundTitle": "الملعب غير موجود",
+    "notFoundBack": "← العودة إلى قائمة الملاعب",
+    "reviews": "تقييم",
+    "players": "حتى",
+    "priceLabel": "سعر الحجز",
+    "perHour": "ساعة",
+    "availability": "الأوقات المتاحة",
+    "location": "الموقع",
+    "directions": "الاتجاهات",
+    "today": "اليوم",
+    "loading": "جارٍ تحميل الملعب…"
+  },
+  "language": {
+    "switchTo": "Français"
+  }
+}

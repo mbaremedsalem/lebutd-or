@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-chalk text-ink font-body antialiased;
+}
+
+h1, h2, h3, h4, .display {
+  @apply font-display uppercase tracking-wide;
+}
+
+/* Ticket de match : bord dentelé façon billet de stade, utilisé pour le prix/heure */
+.ticket-notch {
+  --notch: 10px;
+  mask-image:
+    radial-gradient(circle at var(--notch) 50%, transparent var(--notch), black calc(var(--notch) + 0.5px));
+  mask-repeat: repeat-y;
+  mask-position: left top;
+  mask-size: 100% calc(var(--notch) * 2);
+}
+
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-floodlight focus-visible:ring-offset-2 focus-visible:ring-offset-pitch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

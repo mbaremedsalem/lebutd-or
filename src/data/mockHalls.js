@@ -1,0 +1,138 @@
+/**
+ * Données statiques de démarrage.
+ * ⚠️ La forme de chaque objet doit correspondre EXACTEMENT au typedef `Hall`
+ * (src/types/index.js) et à ce qui sera stocké dans la collection Firestore
+ * `halls`. Quand Firebase sera branché, ce fichier ne sera plus importé
+ * que dans src/services/hallsService.js, en mode "fallback hors-ligne".
+ */
+
+export const mockHalls = [
+  {
+    id: 'hall-001',
+    name: 'Stade Al Waha',
+    city: 'Nouakchott',
+    district: 'Tevragh-Zeina',
+    location: { lat: 18.1231, lng: -15.9575 },
+    pricePerHour: 8000,
+    currency: 'MRU',
+    pitchQuality: 'excellent',
+    pitchQualityScore: 5,
+    photos: [
+      'https://images.unsplash.com/photo-1551958219-acbc608c6377?w=1200&q=80',
+      'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=1200&q=80',
+      'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80',
+    ],
+    availability: [
+      { day: 'lundi', open: '08:00', close: '23:00' },
+      { day: 'mardi', open: '08:00', close: '23:00' },
+      { day: 'mercredi', open: '08:00', close: '23:00' },
+      { day: 'jeudi', open: '08:00', close: '23:00' },
+      { day: 'vendredi', open: '14:00', close: '23:00' },
+      { day: 'samedi', open: '08:00', close: '23:59' },
+      { day: 'dimanche', open: '08:00', close: '22:00' },
+    ],
+    amenities: ['vestiaires', 'douches', 'parking', 'éclairage', 'buvette'],
+    capacity: 7,
+    description:
+      'Terrain synthétique dernière génération avec éclairage LED, idéal pour les matchs en soirée. Ambiance conviviale et tribunes couvertes.',
+    phone: '+222 45 25 10 10',
+    rating: 4.7,
+    reviewsCount: 128,
+  },
+  {
+    id: 'hall-002',
+    name: 'Complexe Sportif El Mina',
+    city: 'Nouakchott',
+    district: 'El Mina',
+    location: { lat: 18.0735, lng: -15.9822 },
+    pricePerHour: 6000,
+    currency: 'MRU',
+    pitchQuality: 'bon',
+    pitchQualityScore: 4,
+    photos: [
+      'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=1200&q=80',
+      'https://images.unsplash.com/photo-1524015368236-4e5e7e0c5e5a?w=1200&q=80',
+      'https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=1200&q=80',
+    ],
+    availability: [
+      { day: 'lundi', open: '09:00', close: '22:00' },
+      { day: 'mardi', open: '09:00', close: '22:00' },
+      { day: 'mercredi', open: '09:00', close: '22:00' },
+      { day: 'jeudi', open: '09:00', close: '22:00' },
+      { day: 'vendredi', open: '15:00', close: '22:00' },
+      { day: 'samedi', open: '09:00', close: '23:00' },
+      { day: 'dimanche', open: '09:00', close: '21:00' },
+    ],
+    amenities: ['vestiaires', 'parking', 'éclairage'],
+    capacity: 5,
+    description:
+      'Deux terrains à 5 côte à côte, parfait pour les tournois entre amis. Sol récemment refait.',
+    phone: '+222 45 25 20 20',
+    rating: 4.3,
+    reviewsCount: 76,
+  },
+  {
+    id: 'hall-003',
+    name: 'Arena Ksar Foot',
+    city: 'Nouakchott',
+    district: 'Ksar',
+    location: { lat: 18.0904, lng: -15.9711 },
+    pricePerHour: 5000,
+    currency: 'MRU',
+    pitchQuality: 'moyen',
+    pitchQualityScore: 3,
+    photos: [
+      'https://images.unsplash.com/photo-1544298621-35a1b9e6b6c7?w=1200&q=80',
+      'https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?w=1200&q=80',
+      'https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=1200&q=80',
+    ],
+    availability: [
+      { day: 'lundi', open: '10:00', close: '21:00' },
+      { day: 'mardi', open: '10:00', close: '21:00' },
+      { day: 'mercredi', open: '10:00', close: '21:00' },
+      { day: 'jeudi', open: '10:00', close: '21:00' },
+      { day: 'vendredi', open: '16:00', close: '21:00' },
+      { day: 'samedi', open: '10:00', close: '22:00' },
+      { day: 'dimanche', open: '10:00', close: '20:00' },
+    ],
+    amenities: ['vestiaires', 'buvette'],
+    capacity: 7,
+    description:
+      'Ambiance de quartier, prix accessible. Le terrain sera refait à neuf ce trimestre.',
+    phone: '+222 45 25 30 30',
+    rating: 3.9,
+    reviewsCount: 41,
+  },
+  {
+    id: 'hall-004',
+    name: 'Green Pitch Arafat',
+    city: 'Nouakchott',
+    district: 'Arafat',
+    location: { lat: 18.0389, lng: -15.9331 },
+    pricePerHour: 7000,
+    currency: 'MRU',
+    pitchQuality: 'excellent',
+    pitchQualityScore: 5,
+    photos: [
+      'https://images.unsplash.com/photo-1602674809245-b0c1f6c9e4b0?w=1200&q=80',
+      'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=1200&q=80',
+      'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1200&q=80',
+    ],
+    availability: [
+      { day: 'lundi', open: '07:00', close: '23:00' },
+      { day: 'mardi', open: '07:00', close: '23:00' },
+      { day: 'mercredi', open: '07:00', close: '23:00' },
+      { day: 'jeudi', open: '07:00', close: '23:00' },
+      { day: 'vendredi', open: '14:00', close: '23:00' },
+      { day: 'samedi', open: '07:00', close: '23:59' },
+      { day: 'dimanche', open: '07:00', close: '22:00' },
+    ],
+    amenities: ['vestiaires', 'douches', 'parking', 'éclairage', 'buvette', 'wifi'],
+    capacity: 11,
+    description:
+      'Le plus grand terrain de la ville, homologué pour les matchs à 11. Gazon hybride entretenu quotidiennement.',
+    phone: '+222 45 25 40 40',
+    rating: 4.9,
+    reviewsCount: 203,
+  },
+];
