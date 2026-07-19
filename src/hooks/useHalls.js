@@ -1,6 +1,6 @@
 // src/hooks/useHalls.js
 import { useState, useEffect } from 'react';
-import { getHalls, getHallById, subscribeToHalls } from '../services/hallsService';
+import { getHalls, getHallById, subscribeToHalls, getReservationsForSalle, transformAvailability } from '../services/hallsService';
 
 export const useHalls = () => {
   const [halls, setHalls] = useState([]);
@@ -13,7 +13,23 @@ export const useHalls = () => {
     const loadHalls = async () => {
       try {
         const data = await getHalls();
-        setHalls(data);
+        console.log('📦 useHalls - Données reçues:', data);
+        
+        // Charger les disponibilités pour chaque salle
+        const hallsWithAvailability = await Promise.all(
+          data.map(async (hall) => {
+            try {
+              const reservations = await getReservationsForSalle(hall.id);
+              hall.availability = transformAvailability(reservations);
+            } catch (err) {
+              console.warn(`⚠️ Pas de disponibilités pour ${hall.id}`);
+              hall.availability = [];
+            }
+            return hall;
+          })
+        );
+        
+        setHalls(hallsWithAvailability);
         setError(null);
       } catch (err) {
         console.error('❌ Erreur:', err);
@@ -24,15 +40,6 @@ export const useHalls = () => {
     };
 
     loadHalls();
-
-    // Écoute en temps réel (optionnel)
-    const unsubscribe = subscribeToHalls((data) => {
-      setHalls(data);
-    });
-
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
   }, []);
 
   return { halls, loading, error };
@@ -45,20 +52,29 @@ export const useHall = (id) => {
 
   useEffect(() => {
     if (!id) {
+      console.log('⚠️ useHall - Pas d\'ID fourni');
       setLoading(false);
       return;
     }
 
-    console.log(`🔄 useHall: Chargement ${id}...`);
+    console.log(`🔄 useHall: Chargement de la salle ${id}...`);
 
     const loadHall = async () => {
       try {
         const data = await getHallById(id);
-        setHall(data);
+        console.log(`📦 useHall - Données reçues pour ${id}:`, data);
+        
+        if (data) {
+          setHall(data);
+        } else {
+          console.log(`⚠️ useHall - Aucune donnée pour ${id}`);
+          setHall(null);
+        }
         setError(null);
       } catch (err) {
-        console.error(`❌ Erreur:`, err);
+        console.error(`❌ Erreur chargement salle ${id}:`, err);
         setError(err);
+        setHall(null);
       } finally {
         setLoading(false);
       }

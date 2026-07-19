@@ -119,38 +119,31 @@ export async function getHallById(id) {
   }
 }
 
-// 📡 Récupérer les réservations d'une salle
-async function getReservationsForSalle(salleId) {
+// src/services/hallsService.js
+// ... (gardez vos imports)
+
+// ✅ EXPORTER ces fonctions pour les utiliser dans useHalls
+export async function getReservationsForSalle(salleId) {
   try {
-    // 🔥 CHANGEMENT ICI: La structure est reservations/salleId/
     const reservationsRef = ref(db, `reservations/${salleId}`);
     const snapshot = await get(reservationsRef);
     
-    console.log(`📦 Réservations pour ${salleId} existe?`, snapshot.exists());
-    
     if (snapshot.exists()) {
-      const data = snapshot.val();
-      console.log(`📦 Réservations trouvées:`, data);
-      return data;
+      return snapshot.val();
     } else {
-      console.log(`⚠️ Aucune réservation pour ${salleId}`);
       return {};
     }
   } catch (error) {
     console.error('❌ Erreur réservations:', error);
-    throw error;
+    return {};
   }
 }
 
-// 🔄 Transformer les réservations en disponibilités
-function transformAvailability(reservations) {
-  console.log('🔄 Transformation des réservations en disponibilités:', reservations);
-  
+export function transformAvailability(reservations) {
   const availability = [];
   const today = new Date();
   
-  // Générer les 7 prochains jours
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 14; i++) { // 14 jours pour plus de disponibilités
     const date = new Date(today);
     date.setDate(date.getDate() + i);
     const dateStr = date.toISOString().split('T')[0];
@@ -161,11 +154,8 @@ function transformAvailability(reservations) {
       slots: []
     };
     
-    // Créneaux de 09:00 à 23:00
     for (let hour = 9; hour <= 23; hour++) {
       const timeStr = `${hour.toString().padStart(2, '0')}:00`;
-      
-      // Vérifier si ce créneau est réservé
       const isReserved = reservations[dateStr] && reservations[dateStr][timeStr];
       
       dayAvailability.slots.push({
@@ -177,7 +167,6 @@ function transformAvailability(reservations) {
     availability.push(dayAvailability);
   }
   
-  console.log('✅ Disponibilités générées:', availability);
   return availability;
 }
 

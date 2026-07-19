@@ -94,7 +94,7 @@ export default function HallDetailPage() {
             </p>
             <p className="font-display text-4xl font-semibold text-floodlight">
               {hall.pricePerHour.toLocaleString('fr-FR')}
-              <span className="ml-1 text-base text-chalk/70">{hall.currency} / h</span>
+              <span className="ml-1 text-base text-chalk/70">MRU / h</span>
             </p>
           </div>
 
