@@ -2,8 +2,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHalls } from '../hooks/useHalls';
-import { useBanners } from '../hooks/useBanners';
-import BannerCarousel from '../components/BannerCarousel';
 import SearchFilters from '../components/SearchFilters';
 import HallList from '../components/HallList';
 import LoadingState from '../components/LoadingState';
@@ -11,8 +9,7 @@ import LoadingState from '../components/LoadingState';
 export default function HomePage() {
   const { t } = useTranslation();
   const { halls, loading: hallsLoading } = useHalls();
-  const { banners, loading: bannersLoading } = useBanners();
-  
+
   // États des filtres
   const [query, setQuery] = useState('');
   const [quality, setQuality] = useState('');
@@ -21,7 +18,6 @@ export default function HomePage() {
   const [minPrice, setMinPrice] = useState(null);
   const [maxPrice, setMaxPrice] = useState(null);
 
-  // Fonction pour réinitialiser tous les filtres
   const clearFilters = () => {
     setQuery('');
     setQuality('');
@@ -34,26 +30,23 @@ export default function HomePage() {
   // Vérifier si une salle est disponible à une date/heure donnée
   const isHallAvailable = (hall, date, time) => {
     if (!date) return true;
-    
     if (!hall.availability || hall.availability.length === 0) return false;
-    
-    const day = hall.availability.find(d => d.date === date);
+
+    const day = hall.availability.find((d) => d.date === date);
     if (!day) return false;
-    
+
     if (time) {
-      const slot = day.slots.find(s => s.time === time);
+      const slot = day.slots.find((s) => s.time === time);
       return slot ? slot.available : false;
     }
-    
-    return day.slots.some(s => s.available);
+    return day.slots.some((s) => s.available);
   };
 
-  // Filtrer les salles
   const filteredHalls = useMemo(() => {
     const q = query.trim().toLowerCase();
-    
+
     return halls.filter((hall) => {
-      const matchesQuery = !q || 
+      const matchesQuery = !q ||
         hall.name.toLowerCase().includes(q) ||
         hall.city.toLowerCase().includes(q) ||
         hall.district.toLowerCase().includes(q);
@@ -69,55 +62,29 @@ export default function HomePage() {
     });
   }, [halls, query, quality, selectedDate, selectedTime, minPrice, maxPrice]);
 
-  // Compter le nombre total de créneaux disponibles
   const totalAvailableSlots = useMemo(() => {
     let count = 0;
-    filteredHalls.forEach(hall => {
+    filteredHalls.forEach((hall) => {
       if (hall.availability) {
-        hall.availability.forEach(day => {
-          count += day.slots.filter(s => s.available).length;
+        hall.availability.forEach((day) => {
+          count += day.slots.filter((s) => s.available).length;
         });
       }
     });
     return count;
   }, [filteredHalls]);
 
-  return (
-    <div className="mx-auto max-w-6xl px-5 py-8" dir={t('dir')}>
-      {/* <section className="mb-10">
-        <p className="mb-1 font-mono text-xs uppercase tracking-widest text-pitch/70">
-          {t('home.subtitle')}
-        </p>
-        <h1 className="mb-5 font-display text-3xl font-semibold text-ink sm:text-4xl">
-          {t('home.title')}
-        </h1>
-        {!bannersLoading && <BannerCarousel banners={banners} />}
-      </section> */}
+  const hasActiveFilters = query || quality || selectedDate || selectedTime || minPrice || maxPrice;
 
-      <section>
-        <div className="mb-6">
-          {/* En-tête avec résultats */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <div>
-              <h2 className="font-display text-2xl font-semibold text-ink">
-                {t('home.availableHalls')}
-                <span className="ml-2 text-base font-normal text-ink/50">
-                  ({filteredHalls.length} {t('home.results', { count: filteredHalls.length })})
-                </span>
-              </h2>
-              {selectedDate && (
-                <p className="text-sm text-ink/50 mt-1">
-                  {t('home.availableOn')} {new Date(selectedDate).toLocaleDateString(
-                    t('locale') === 'ar' ? 'ar-MA' : 'fr-FR'
-                  )}
-                  {selectedTime && ` ${t('home.at')} ${selectedTime}`}
-                  {totalAvailableSlots > 0 && ` · ${totalAvailableSlots} ${t('home.slotsAvailable')}`}
-                </p>
-              )}
-            </div>
-          </div>
-          
-          {/* Filtres avancés */}
+  return (
+    <div dir={t('dir')}>
+      {/* Barre de recherche collante : c'est la première chose que voit l'utilisateur sur mobile,
+          et elle reste accessible pendant le scroll dans la liste des salles. */}
+      <div className="sticky top-0 z-20 border-b border-line bg-chalk/95 backdrop-blur-sm">
+        <div className="mx-auto max-w-6xl px-4 pt-3 pb-3 sm:px-5">
+          <h1 className="mb-2.5 font-display text-lg font-semibold text-ink sm:text-xl">
+            {t('home.title')}
+          </h1>
           <SearchFilters
             query={query}
             onQueryChange={setQuery}
@@ -134,6 +101,24 @@ export default function HomePage() {
             onClearFilters={clearFilters}
           />
         </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 py-5 sm:px-5">
+        <div className="mb-4">
+          <p className="text-sm text-ink/60">
+            <span className="font-semibold text-ink">{filteredHalls.length}</span>{' '}
+            {t('home.results', { count: filteredHalls.length })}
+          </p>
+          {selectedDate && (
+            <p className="mt-0.5 text-xs text-ink/45">
+              {t('home.availableOn')} {new Date(selectedDate).toLocaleDateString(
+                t('locale') === 'ar' ? 'ar-MA' : 'fr-FR'
+              )}
+              {selectedTime && ` ${t('home.at')} ${selectedTime}`}
+              {totalAvailableSlots > 0 && ` · ${totalAvailableSlots} ${t('home.slotsAvailable')}`}
+            </p>
+          )}
+        </div>
 
         {hallsLoading ? (
           <LoadingState label={t('home.loading')} />
@@ -142,11 +127,9 @@ export default function HomePage() {
             <div className="text-6xl mb-4">🔍</div>
             <p className="font-display text-xl text-ink/60">{t('home.noHallsFound')}</p>
             <p className="mt-2 text-sm text-ink/40 max-w-md mx-auto">
-              {selectedDate || selectedTime || minPrice || maxPrice 
-                ? t('home.noResults')
-                : t('home.tryModifyFilters')}
+              {hasActiveFilters ? t('home.noResults') : t('home.tryModifyFilters')}
             </p>
-            {(selectedDate || selectedTime || minPrice || maxPrice || query || quality) && (
+            {hasActiveFilters && (
               <button
                 onClick={clearFilters}
                 className="mt-4 rounded-xl bg-turf px-6 py-2.5 text-sm font-medium text-white hover:bg-turf-dark transition"
@@ -158,7 +141,7 @@ export default function HomePage() {
         ) : (
           <HallList halls={filteredHalls} />
         )}
-      </section>
+      </div>
     </div>
   );
 }
