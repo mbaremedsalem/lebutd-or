@@ -11,7 +11,7 @@ function generateDemoAvailability() {
   const out = [];
   const base = new Date();
   base.setHours(0, 0, 0, 0);
-  const hours = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00', '02:00'];
+  const hours = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00'];
   for (let i = -2; i < 35; i++) {
     const d = new Date(base);
     d.setDate(base.getDate() + i);
@@ -29,19 +29,9 @@ function generateDemoAvailability() {
 
 function groupByPeriod(slots) {
   const groups = { matin: [], apresmidi: [], soir: [] };
-  // Trie chronologiquement d'abord : 00:00-02:xx doit s'afficher à la SUITE
-  // du soir (prolongement d'un match tardif), pas avant le matin.
-  const sorted = [...slots].sort((a, b) => {
-    const ha = parseInt(a.time.split(':')[0], 10);
-    const hb = parseInt(b.time.split(':')[0], 10);
-    const oa = ha < 3 ? ha + 24 : ha; // 00:00-02:xx repoussé après 23:xx
-    const ob = hb < 3 ? hb + 24 : hb;
-    return oa - ob;
-  });
-  sorted.forEach((s) => {
+  slots.forEach((s) => {
     const h = parseInt(s.time.split(':')[0], 10);
-    if (h < 3) groups.soir.push(s);        // 00:00-02:xx : suite de la soirée
-    else if (h < 12) groups.matin.push(s);
+    if (h < 12) groups.matin.push(s);
     else if (h < 18) groups.apresmidi.push(s);
     else groups.soir.push(s);
   });

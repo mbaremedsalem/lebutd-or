@@ -5,15 +5,6 @@
     "navHalls": "Salles",
     "navOffers": "Offres"
   },
-  "home": {
-    "eyebrow": "Coup d'envoi",
-    "title": "Trouve et réserve ton terrain",
-    "sectionTitle": "Salles disponibles",
-    "searchPlaceholder": "Rechercher par ville, quartier ou nom de salle…",
-    "loadingHalls": "Chargement des salles…",
-    "emptyTitle": "Aucune salle ne correspond à ta recherche",
-    "emptySubtitle": "Essaie une autre ville ou un autre quartier."
-  },
   "quality": {
     "allLabel": "Tous les états de terrain",
     "excellent": "Excellent état",
@@ -53,21 +44,78 @@
     "next": "Offre suivante",
     "goTo": "Aller à l'offre {{n}}"
   },
-  "detail": {
-    "back": "Retour aux salles",
-    "notFoundTitle": "Salle introuvable",
-    "notFoundBack": "← Retour à la liste des salles",
-    "reviews": "avis",
-    "players": "À",
-    "priceLabel": "Prix de la location",
-    "perHour": "h",
-    "availability": "Disponibilités",
-    "location": "Localisation",
-    "directions": "Itinéraire",
-    "today": "Aujourd'hui",
-    "loading": "Chargement de la salle…"
-  },
   "language": {
     "switchTo": "العربية"
+  },
+
+  "common": {
+    "mru": "MRU",
+    "perHour": "/ h"
+  },
+
+  "dir": "ltr",
+  "locale": "fr",
+  "home": {
+    "title": "Trouve et réserve ton terrain",
+    "subtitle": "Coup d'envoi",
+    "availableHalls": "Salles disponibles",
+    "results": "résultat",
+    "results_plural": "résultats",
+    "noHallsFound": "Aucune salle trouvée",
+    "noResults": "Aucune salle ne correspond à vos critères de recherche",
+    "tryModifyFilters": "Essayez de modifier vos filtres ou de réinitialiser la recherche",
+    "resetFilters": "Réinitialiser les filtres",
+    "loading": "Chargement des salles…",
+    "availableOn": "Disponibles le",
+    "at": "à",
+    "slotsAvailable": "créneaux disponibles",
+    "filters": {
+      "searchPlaceholder": "Rechercher une salle par nom, ville ou quartier...",
+      "allHours": "Toutes les heures",
+      "allQualities": "Tous",
+      "excellent": "⭐ Excellent",
+      "good": "👍 Bon",
+      "average": "👌 Moyen",
+      "quality": "État",
+      "minPrice": "Prix min",
+      "maxPrice": "Prix max",
+      "reset": "Réinitialiser",
+      "date": "Date",
+      "time": "Heure"
+    }
+  },
+  "detail": {
+    "title": "Détails de la salle",
+    "notFound": "Salle introuvable",
+    "backToList": "Retour à la liste des salles",
+    "loading": "Chargement de la salle…",
+    "priceLabel": "Prix de la location",
+    "availabilityLabel": "Disponibilités",
+    "locationLabel": "Localisation",
+    "reviews": "avis",
+    "capacity": "À {capacity} personnes",
+    "call": "Appeler",
+    "perHour": "/ h",
+    "currency": "MRU"
+  },
+  "availability": {
+    "morning": "Matin",
+    "afternoon": "Après-midi",
+    "evening": "Soir",
+    "today": "Aujourd'hui",
+    "noSlotsForDay": "Pas de créneaux ce jour",
+    "selectDate": "Choisissez une date marquée dans le calendrier",
+    "available": "dispo",
+    "fullyBooked": "Complet ce jour-là",
+    "tryAnotherDay": "Essayez un autre jour dans le calendrier",
+    "book": "Réserver"
+  },
+    "hallList": {
+    "available": "Disponible",
+    "nextSlot": "Prochain créneau",
+    "noHallsFound": "Aucune salle trouvée",
+    "tryModifyFilters": "Essayez de modifier vos filtres"
   }
+
+
 }

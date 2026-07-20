@@ -5,15 +5,6 @@
     "navHalls": "الملاعب",
     "navOffers": "العروض"
   },
-  "home": {
-    "eyebrow": "انطلاقة",
-    "title": "ابحث عن ملعبك واحجزه",
-    "sectionTitle": "الملاعب المتوفرة",
-    "searchPlaceholder": "ابحث بالمدينة أو الحي أو اسم الملعب…",
-    "loadingHalls": "جارٍ تحميل الملاعب…",
-    "emptyTitle": "لا يوجد ملعب يطابق بحثك",
-    "emptySubtitle": "جرّب مدينة أو حيًا آخر."
-  },
   "quality": {
     "allLabel": "كل حالات الملعب",
     "excellent": "حالة ممتازة",
@@ -53,21 +44,83 @@
     "next": "العرض التالي",
     "goTo": "الانتقال إلى العرض {{n}}"
   },
-  "detail": {
-    "back": "العودة إلى الملاعب",
-    "notFoundTitle": "الملعب غير موجود",
-    "notFoundBack": "← العودة إلى قائمة الملاعب",
-    "reviews": "تقييم",
-    "players": "حتى",
-    "priceLabel": "سعر الحجز",
-    "perHour": "ساعة",
-    "availability": "الأوقات المتاحة",
-    "location": "الموقع",
-    "directions": "الاتجاهات",
-    "today": "اليوم",
-    "loading": "جارٍ تحميل الملعب…"
-  },
   "language": {
     "switchTo": "Français"
+  },
+
+  "common": {
+    "mru": "أوقية",
+    "perHour": "/ ساعة"
+  },
+
+
+
+  
+  "dir": "rtl",
+  "locale": "ar",
+  "home": {
+    "title": "ابحث واحجز ملعبك",
+    "subtitle": "انطلاقة",
+    "availableHalls": "الملاعب المتاحة",
+    "results": "نتيجة",
+    "results_plural": "نتائج",
+    "noHallsFound": "لم يتم العثور على ملاعب",
+    "noResults": "لا توجد ملاعب تطابق معايير البحث الخاصة بك",
+    "tryModifyFilters": "حاول تعديل عوامل التصفية أو إعادة تعيين البحث",
+    "resetFilters": "إعادة تعيين الفلتر",
+    "loading": "جاري تحميل الملاعب…",
+    "availableOn": "متاحة في",
+    "at": "الساعة",
+    "slotsAvailable": "مواعيد متاحة",
+    "filters": {
+      "searchPlaceholder": "ابحث عن ملعب بالاسم، المدينة أو الحي...",
+      "allHours": "جميع الأوقات",
+      "allQualities": "الكل",
+      "excellent": "⭐ ممتاز",
+      "good": "👍 جيد",
+      "average": "👌 متوسط",
+      "quality": "الحالة",
+      "minPrice": "الحد الأدنى للسعر",
+      "maxPrice": "الحد الأقصى للسعر",
+      "reset": "إعادة تعيين",
+      "date": "التاريخ",
+      "time": "الوقت"
+    }
+  },
+  "detail": {
+    "title": "تفاصيل الملعب",
+    "notFound": "الملعب غير موجود",
+    "backToList": "العودة إلى قائمة الملاعب",
+    "loading": "جاري تحميل الملعب…",
+    "priceLabel": "سعر الإيجار",
+    "availabilityLabel": "المواعيد المتاحة",
+    "locationLabel": "الموقع",
+    "reviews": "تقييم",
+    "capacity": "لـ {capacity} أشخاص",
+    "call": "اتصال",
+    "perHour": "/ ساعة",
+    "currency": "أوقية"
+  },
+  "availability": {
+    "morning": "الصباح",
+    "afternoon": "بعد الظهر",
+    "evening": "المساء",
+    "today": "اليوم",
+    "noSlotsForDay": "لا توجد مواعيد لهذا اليوم",
+    "selectDate": "اختر تاريخًا محددًا في التقويم",
+    "available": "متاح",
+    "fullyBooked": "مكتمل هذا اليوم",
+    "tryAnotherDay": "جرب يومًا آخر في التقويم",
+    "book": "احجز"
+  },
+    "hallList": {
+    "available": "متاح",
+    "nextSlot": "الموعد التالي",
+    "noHallsFound": "لم يتم العثور على ملاعب",
+    "tryModifyFilters": "حاول تعديل عوامل التصفية"
   }
+
+
+
+
 }

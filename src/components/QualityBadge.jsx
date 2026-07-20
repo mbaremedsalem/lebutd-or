@@ -1,17 +1,28 @@
-const QUALITY_META = {
-  excellent: { label: 'Excellent état', color: 'bg-turf/15 text-pitch-dark border-turf/40' },
-  bon: { label: 'Bon état', color: 'bg-turf/10 text-pitch-light border-turf/25' },
-  moyen: { label: 'État moyen', color: 'bg-floodlight/20 text-ink border-floodlight/50' },
-  a_renover: { label: 'À rénover', color: 'bg-red-100 text-red-800 border-red-300' },
-};
+// src/components/QualityBadge.jsx
+import React from 'react';
 
-export default function QualityBadge({ quality }) {
-  const meta = QUALITY_META[quality] ?? QUALITY_META.moyen;
+const QualityBadge = ({ quality }) => {
+  // Déterminer la couleur en fonction de la qualité
+  const getQualityStyles = (q) => {
+    const qualityMap = {
+      'ممتاز': 'bg-green-100 text-green-700',
+      'Excellent': 'bg-green-100 text-green-700',
+      'excellent': 'bg-green-100 text-green-700',
+      'جيد': 'bg-blue-100 text-blue-700',
+      'Bon': 'bg-blue-100 text-blue-700',
+      'bon': 'bg-blue-100 text-blue-700',
+      'متوسط': 'bg-yellow-100 text-yellow-700',
+      'Moyen': 'bg-yellow-100 text-yellow-700',
+      'moyen': 'bg-yellow-100 text-yellow-700'
+    };
+    return qualityMap[q] || 'bg-gray-100 text-gray-700';
+  };
+
   return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${meta.color}`}
-    >
-      {meta.label}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${getQualityStyles(quality)}`}>
+      {quality}
     </span>
   );
-}
+};
+
+export default QualityBadge;

@@ -6,6 +6,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* src/index.css */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .flex {
+  flex-direction: row-reverse;
+}
+
+[dir="ltr"] .flex {
+  flex-direction: row;
+}
+
 body {
   @apply bg-chalk text-ink font-body antialiased;
 }
