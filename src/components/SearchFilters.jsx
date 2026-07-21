@@ -1,7 +1,9 @@
 // src/components/SearchFilters.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X, MapPin, LocateFixed, Loader2 } from 'lucide-react';
+
+const RADIUS_OPTIONS = [1, 3, 5, 10, 20];
 
 const SearchFilters = ({
   query,
@@ -16,11 +18,101 @@ const SearchFilters = ({
   onMinPriceChange,
   maxPrice,
   onMaxPriceChange,
+  location,
+  onLocationChange,
+  radius,
+  onRadiusChange,
   onClearFilters
 }) => {
   const { t } = useTranslation();
   const [panelOpen, setPanelOpen] = useState(false);
   const isRTL = t('dir') === 'rtl';
+
+  // --- Recherche d'adresse pour le filtre de localisation ---
+  const [addressQuery, setAddressQuery] = useState(location?.label || '');
+  const [addressResults, setAddressResults] = useState([]);
+  const [addressSearching, setAddressSearching] = useState(false);
+  const [addressOpen, setAddressOpen] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState(null);
+  const debounceRef = useRef(null);
+  const addressBoxRef = useRef(null);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (addressBoxRef.current && !addressBoxRef.current.contains(e.target)) setAddressOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    if (addressQuery.trim().length < 3 || addressQuery === location?.label) {
+      setAddressResults([]);
+      return;
+    }
+
+    setAddressSearching(true);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&limit=6&addressdetails=1&countrycodes=mr&q=${encodeURIComponent(addressQuery)}`
+        );
+        const data = await res.json();
+        setAddressResults(data);
+      } catch {
+        setAddressResults([]);
+      } finally {
+        setAddressSearching(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(debounceRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addressQuery]);
+
+  const handleSelectAddress = (place) => {
+    const label = place.display_name;
+    onLocationChange({ lat: parseFloat(place.lat), lng: parseFloat(place.lon), label });
+    setAddressQuery(label);
+    setAddressResults([]);
+    setAddressOpen(false);
+    if (!radius) onRadiusChange(5);
+  };
+
+  const locateMe = () => {
+    if (!navigator.geolocation) {
+      setGeoError("La géolocalisation n'est pas prise en charge par cet appareil.");
+      return;
+    }
+    setGeoLoading(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const label = t('home.filters.myPosition', 'Ma position actuelle');
+        onLocationChange({ lat: pos.coords.latitude, lng: pos.coords.longitude, label });
+        setAddressQuery(label);
+        setAddressResults([]);
+        setGeoLoading(false);
+        if (!radius) onRadiusChange(5);
+      },
+      () => {
+        setGeoError('Position indisponible. Vérifiez les autorisations de localisation.');
+        setGeoLoading(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  const clearLocation = () => {
+    onLocationChange(null);
+    onRadiusChange(null);
+    setAddressQuery('');
+    setAddressResults([]);
+    setGeoError(null);
+  };
 
   // Heures de 09:00 à 23:00
   const hours = [];
@@ -28,7 +120,7 @@ const SearchFilters = ({
     hours.push(`${i.toString().padStart(2, '0')}:00`);
   }
 
-  const advancedCount = [selectedDate, selectedTime, quality, minPrice, maxPrice].filter(Boolean).length;
+  const advancedCount = [selectedDate, selectedTime, quality, minPrice, maxPrice, location].filter(Boolean).length;
   const hasActiveFilters = Boolean(query) || advancedCount > 0;
 
   return (
@@ -72,6 +164,82 @@ const SearchFilters = ({
       >
         <div className="overflow-hidden">
           <div className="rounded-2xl border border-line bg-soft/60 p-4 space-y-4">
+
+            {/* Filtre par localisation : adresse recherchée ou position réelle + rayon */}
+            <div>
+              <label className="mb-1 block text-xs font-medium text-ink/50">
+                {t('home.filters.locationLabel', 'Autour de moi')}
+              </label>
+              <div ref={addressBoxRef} className="relative">
+                <MapPin className={`pointer-events-none absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 h-4 w-4 -translate-y-1/2 text-ink/40`} />
+                <input
+                  type="text"
+                  value={addressQuery}
+                  onChange={(e) => { setAddressQuery(e.target.value); setAddressOpen(true); if (location) onLocationChange(null); }}
+                  onFocus={() => setAddressOpen(true)}
+                  placeholder={t('home.filters.locationPlaceholder', 'Adresse, quartier, ville...')}
+                  className={`w-full rounded-xl border border-line bg-white py-2.5 text-sm focus:border-turf focus:outline-none focus:ring-2 focus:ring-turf/20 transition ${isRTL ? 'pr-9 pl-16' : 'pl-9 pr-16'}`}
+                />
+                <div className={`absolute ${isRTL ? 'left-2' : 'right-2'} top-1/2 flex -translate-y-1/2 items-center gap-1`}>
+                  {addressSearching && <Loader2 className="h-4 w-4 animate-spin text-ink/30" />}
+                  {addressQuery && !addressSearching && (
+                    <button
+                      type="button"
+                      onClick={clearLocation}
+                      className="rounded p-1 text-ink/40 hover:text-ink"
+                      aria-label="Effacer"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+
+                {addressOpen && addressResults.length > 0 && (
+                  <ul className="absolute left-0 right-0 top-full z-[500] mt-1 max-h-56 overflow-y-auto rounded-xl border border-line bg-white shadow-lg">
+                    {addressResults.map((place) => (
+                      <li key={place.place_id}>
+                        <button
+                          type="button"
+                          onClick={() => handleSelectAddress(place)}
+                          className="block w-full truncate px-3 py-2.5 text-left text-sm text-ink/80 hover:bg-soft/60 transition"
+                        >
+                          {place.display_name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <div className={`mt-2 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <button
+                  type="button"
+                  onClick={locateMe}
+                  disabled={geoLoading}
+                  className="flex shrink-0 items-center gap-1.5 rounded-xl border border-line bg-white px-3 py-2 text-xs font-semibold text-ink/70 hover:border-turf/50 transition disabled:opacity-60"
+                >
+                  {geoLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <LocateFixed className="h-3.5 w-3.5" />}
+                  {t('home.filters.useMyPosition', 'Utiliser ma position')}
+                </button>
+
+                {location && (
+                  <select
+                    value={radius || 5}
+                    onChange={(e) => onRadiusChange(Number(e.target.value))}
+                    className="flex-1 appearance-none rounded-xl border border-line bg-white px-3 py-2 text-xs font-medium focus:border-turf focus:outline-none focus:ring-2 focus:ring-turf/20 transition"
+                  >
+                    {RADIUS_OPTIONS.map((km) => (
+                      <option key={km} value={km}>
+                        {t('home.filters.withinRadius', 'Dans un rayon de {{km}} km', { km })}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {geoError && <p className="mt-1.5 text-xs text-red-500">{geoError}</p>}
+            </div>
+
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="mb-1 block text-xs font-medium text-ink/50">
@@ -148,7 +316,7 @@ const SearchFilters = ({
             <div className={`flex items-center justify-between pt-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <button
                 type="button"
-                onClick={onClearFilters}
+                onClick={() => { onClearFilters(); clearLocation(); }}
                 disabled={!hasActiveFilters}
                 className="text-sm font-medium text-ink/50 hover:text-red-600 disabled:opacity-30 disabled:hover:text-ink/50 transition"
               >
@@ -173,6 +341,12 @@ const SearchFilters = ({
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700">
               🔍 {query}
               <button onClick={() => onQueryChange('')} className="hover:text-red-500">×</button>
+            </span>
+          )}
+          {location && (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-teal-50 px-3 py-1.5 text-xs font-medium text-teal-700 max-w-[220px]">
+              📍 <span className="truncate">{location.label}</span> · {radius || 5} km
+              <button onClick={clearLocation} className="hover:text-red-500 shrink-0">×</button>
             </span>
           )}
           {quality && (
@@ -200,7 +374,7 @@ const SearchFilters = ({
             </span>
           )}
           <button
-            onClick={onClearFilters}
+            onClick={() => { onClearFilters(); clearLocation(); }}
             className="inline-flex shrink-0 items-center gap-1 rounded-full border border-line px-3 py-1.5 text-xs font-medium text-ink/50 hover:border-red-200 hover:text-red-600 transition"
           >
             <X className="h-3 w-3" />
